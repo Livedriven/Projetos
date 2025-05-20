@@ -1,0 +1,129 @@
+@use "variable";
+@use "mixins";
+@use "base";
+
+
+.pagina{
+    @include mixins.grid(){
+        grid-template-areas: 
+        "nav"
+        "main"
+        "footer";
+        min-height: 100vh;
+        grid-template-rows: auto 1fr auto
+    };
+       
+}
+
+
+.navbar{
+    grid-area:nav;
+    @include mixins.flex(){
+        overflow: hidden;
+        background-color: variable.$bg-navbar;
+        color:variable.$color;
+        padding: 1rem 2rem;
+    };
+
+    & .navbar__list{
+        @include mixins.flex(){
+            list-style: none;
+            gap: 1rem;
+        };
+
+        & a{
+            display: inline-block;
+            text-decoration: none;
+            color: variable.$link-color;
+            font-size:16px;
+            padding: 0.3rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        & a:hover{
+                color: variable.$link-hover;
+            }
+    }
+
+    & .logo{
+        font-size: 1rem;
+    }
+    
+}
+
+.menu-toggle{
+        display: none;
+        cursor: pointer;
+        font-size: 1rem;
+}
+
+/*estilizando o conteudo principal (main) e as seções*/
+.container__flores{
+    grid-area: main;
+}
+
+section{
+    padding: 20px 20px;
+    text-align: center;
+    background-color: variable.$bg-section;
+
+    & .seção__titulo{
+        text-align: center;
+        color: variable.$text-section;
+        font-size:24px;
+        margin-bottom: 30px;
+    }
+}
+/*agora organizando e estilizando os itens dentro das seções*/
+.flores__grid{
+    @include mixins.grid(){
+        grid-template-columns: 1fr 1fr 1fr;
+        gap:30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        
+    };
+}
+
+.flores__item{
+        overflow: hidden;
+        box-shadow: variable.$shadow;
+        background-color: variable.$bg-itens;
+        border-radius: 20px;
+        padding: 7px;
+        font-size:1.2;
+        max-width: 330px;
+        width: 100%;
+        transition: transform 0.5s;
+
+    & figure figcaption{
+        display: none;
+    }
+
+    & figure img{
+        width: 100%;
+        display: block;
+        padding: 1rem;
+    }
+
+    & p{
+        line-height: 1.4;
+        font-size: 0.95rem;
+    }
+
+}
+
+.flores__item:hover{
+            transform: scale(1.06);
+}
+
+.rodape{
+    grid-area: footer;
+    text-align: center;
+    background-color: variable.$bg-footer;
+    color:variable.$color;
+    padding: 20px;
+    
+}
+/* tornando o menu responsivo*/
+@include mixins.menu-responsivo();
+@include mixins.mobile-responsivo();

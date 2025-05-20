@@ -1,0 +1,156 @@
+@charset "UTF-8";
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.pagina {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: "nav" "main" "footer";
+  min-height: 100vh;
+  grid-template-rows: auto 1fr auto;
+}
+
+.navbar {
+  grid-area: nav;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  background-color: #222;
+  color: #fff;
+  padding: 1rem 2rem;
+}
+.navbar .navbar__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  gap: 1rem;
+}
+.navbar .navbar__list a {
+  display: inline-block;
+  text-decoration: none;
+  color: #FFA500;
+  font-size: 16px;
+  padding: 0.3rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.navbar .navbar__list a:hover {
+  color: #FFD700;
+}
+.navbar .logo {
+  font-size: 1rem;
+}
+
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/*estilizando o conteudo principal (main) e as seções*/
+.container__flores {
+  grid-area: main;
+}
+
+section {
+  padding: 20px 20px;
+  text-align: center;
+  background-color: #276749;
+}
+section .seção__titulo {
+  text-align: center;
+  color: #F0FFF4;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+/*agora organizando e estilizando os itens dentro das seções*/
+.flores__grid {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.flores__item {
+  overflow: hidden;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.779);
+  background-color: #f5e1d4;
+  border-radius: 20px;
+  padding: 7px;
+  font-size: 1.2;
+  max-width: 330px;
+  width: 100%;
+  transition: transform 0.5s;
+}
+.flores__item figure figcaption {
+  display: none;
+}
+.flores__item figure img {
+  width: 100%;
+  display: block;
+  padding: 1rem;
+}
+.flores__item p {
+  line-height: 1.4;
+  font-size: 0.95rem;
+}
+
+.flores__item:hover {
+  transform: scale(1.06);
+}
+
+.rodape {
+  grid-area: footer;
+  text-align: center;
+  background-color: #1e1e1e;
+  color: #fff;
+  padding: 20px;
+}
+
+/* tornando o menu responsivo*/
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .navbar .navbar__list {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+  .menu-toggle {
+    display: block;
+  }
+  .navbar__list.active {
+    display: flex;
+    background-color: #221d20;
+  }
+  .flores__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+  }
+}
+@media (max-width: 530px) {
+  .flores__grid {
+    grid-template-columns: auto;
+  }
+  .flores__item p {
+    line-height: 1.4;
+    font-size: 1.12rem;
+  }
+}
+@media (max-width: 530px) and (max-width: 580px) {
+  .flores__grid {
+    grid-template-columns: auto;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
