@@ -1,5 +1,10 @@
+@use "variable";
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
+body{
+    background-color: map-get($map: variable.$cores, $key:fundo );
+}
+
