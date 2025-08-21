@@ -1,1 +1,1 @@
-<h1>Minha primeira projeto solo envolvendo mais javascript</h1>
+<h1>Minha primeiro projeto solo envolvendo javascript</h1>
