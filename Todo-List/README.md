@@ -1,1 +1,1 @@
- Minha primeiro projeto solo envolvendo javascript
+ Minha primeiro projeto solo que usa de fato javascript
