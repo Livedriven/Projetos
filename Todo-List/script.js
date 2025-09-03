@@ -4,137 +4,88 @@ const btn = document.getElementById('btn');
 const btnClean = document.getElementById('btnClean');
 const ul = document.getElementById('imprimir');
 const inputFiltro = document.getElementById('filtro');
-const btnFilter = document.getElementById('btnFilter');
 const ulFiltro = document.getElementById('imprimirFiltro');
-let filtro = [];
+
+// ---------- Funções ----------
 
 // Adiciona tarefa
-const adicionarTarefa = function(tarefa){
-    lista.push(tarefa);
+function adicionarTarefa(tarefa) {
+  lista.push(tarefa);
+  renderizar();
 }
 
-// Exibe lista principal
-const Exibirlista = function(){
-    ul.innerHTML = "";
+// Renderiza qualquer lista em qualquer <ul>
+function renderizarLista(array, ulDestino) {
+  ulDestino.innerHTML = "";
 
-    lista.forEach((item, index) => {
-        //criando elementos html para gerar a lista e não ter que recarregar toda vez que esse lop for iniciado
-        let li = document.createElement('li');
-        let button = document.createElement('button');
+  array.forEach((item, index) => {
+    let li = document.createElement('li');
+    let button = document.createElement('button');
 
-        button.innerText = '❌';
-        button.classList.add("excluir");
-        button.setAttribute("data-index",index);
-        // fazendo li receber o botão de excluir item
-        li.innerText = item;
+    li.textContent = item;
+    button.textContent = "❌";
+    button.classList.add("excluir");
+    button.dataset.index = index;
 
-        //criando botão e li
-        li.appendChild(button);
-        ul.appendChild(li);
-    });
+    li.appendChild(button);
+    ulDestino.appendChild(li);
 
-    excluirItem();
+    // evento de excluir
+    button.addEventListener("click", () => excluirItem(index));
+  });
 }
 
+// Renderiza lista principal e a filtrada (se houver filtro ativo)
+function renderizar() {
+  renderizarLista(lista, ul);
 
-// Filtra tarefas
-const filtrandoTarefas = function(tarefa){
-    filtro = lista.map((item, index) => ({ item, index }))
-        .filter(obj => obj.item.toLowerCase().includes(tarefa.toLowerCase()));
-}
+  let termo = inputFiltro.value.trim().toLowerCase();
+  if (termo) {
+    const filtrados = lista
+      .map((item, index) => ({ item, index }))
+      .filter(obj => obj.item.toLowerCase().includes(termo));
 
-
-// Exibe lista filtrada
-const ExibirlistaFiltrada = function () {
     ulFiltro.innerHTML = "";
-    
-    filtro.forEach((obj) => {
-        let li = document.createElement('li');
-        let button = document.createElement('button');
+    filtrados.forEach(obj => {
+      let li = document.createElement("li");
+      let button = document.createElement("button");
 
-        button.innerText = '❌';
-        button.classList.add("excluir");
-        button.setAttribute("data-index", obj.index);
-        li.innerText = obj.item;
+      li.textContent = obj.item;
+      button.textContent = "❌";
+      button.classList.add("excluir");
+      button.dataset.index = obj.index;
 
-        li.appendChild(button);
-        ulFiltro.appendChild(li);
+      li.appendChild(button);
+      ulFiltro.appendChild(li);
 
+      button.addEventListener("click", () => excluirItem(obj.index));
     });
-    
-    excluirItem();
+  } else {
+    ulFiltro.innerHTML = "";
+  }
 }
 
-const excluirItem = function(){
-    // Botões de excluir da lista principal
-    ul.querySelectorAll('.excluir').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const index = e.target.getAttribute('data-index');
-
-            lista.splice(index,1);
-
-            Exibirlista();
-
-            // Atualiza o filtro (se estiver ativo)
-            if(inputFiltro.value.trim() !== ""){
-                filtrandoTarefas(inputFiltro.value.trim());
-                ExibirlistaFiltrada();
-            }
-            else{
-                ulFiltro.innerHTML = ""; 
-            }
-        });
-    });
-
-    // Botões de excluir da lista filtrada
-    ulFiltro.querySelectorAll('.excluir').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const index = e.target.getAttribute('data-index');
-
-            lista.splice(index, 1);
-
-            Exibirlista()
-
-            if(inputFiltro.value.trim() !== ""){
-                filtrandoTarefas(inputFiltro.value.trim());
-                ExibirlistaFiltrada();
-            } else {
-                ulFiltro.innerHTML = "";
-            }
-        });
-    });
+// Excluir item
+function excluirItem(index) {
+  lista.splice(index, 1);
+  renderizar();
 }
 
+// ---------- Eventos ----------
 
-// Eventos
-btn.addEventListener('click', () => {
-    let tarefa = inputEntrada.value.trim();
-
-    if(tarefa){
-        adicionarTarefa(tarefa);
-    }
-
-    Exibirlista();
-
-    inputEntrada.value = "";
-    inputEntrada.focus();
+// Adicionar tarefa
+btn.addEventListener("click", () => {
+  const tarefa = inputEntrada.value.trim();
+  if (tarefa) adicionarTarefa(tarefa);
+  inputEntrada.value = "";
+  inputEntrada.focus();
 });
 
-btnClean.addEventListener('click', () => {
-    lista.length = 0;
-    Exibirlista();
-    ulFiltro.innerHTML = ""; // limpa também o filtro
+// Limpar lista
+btnClean.addEventListener("click", () => {
+  lista.length = 0;
+  renderizar();
 });
 
-btnFilter.addEventListener('click', () => {
-    let filtro = inputFiltro.value.trim();
-
-    if(filtro){
-        filtrandoTarefas(filtro);
-        ExibirlistaFiltrada();
-    } else {
-        ulFiltro.innerHTML = "<li><strong>Digite algo para filtrar</strong></li>";
-    }
-
-    inputFiltro.focus();
-});
+// Filtrar em tempo real (UX melhor que botão)
+inputFiltro.addEventListener("input", renderizar);
