@@ -61,3 +61,7 @@ li{
     padding-left: 7px;
     font-size: 18px;
 }
+.feito{
+    text-decoration: line-through;
+    color: rgb(155, 148, 148);
+}

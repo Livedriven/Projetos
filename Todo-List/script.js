@@ -10,7 +10,7 @@ const ulFiltro = document.getElementById('imprimirFiltro');
 
 // Adiciona tarefa
 function adicionarTarefa(tarefa) {
-  lista.push(tarefa);
+  lista.push({nome:tarefa, concluido:false});
   renderizar();
 }
 
@@ -21,17 +21,26 @@ function renderizarLista(array, ulDestino) {
   array.forEach((item, index) => {
     let li = document.createElement('li');
     let button = document.createElement('button');
+    let concluido = document.createElement('button');
 
-    li.textContent = item;
+    li.textContent = item.nome;
+    if(item.concluido)li.classList.add('feito');
+
     button.textContent = "❌";
     button.classList.add("excluir");
     button.dataset.index = index;
 
+    concluido.textContent = "✅";
+    concluido.classList.add('concluido');
+    concluido.dataset.index = index;
+
+    li.appendChild(concluido);
     li.appendChild(button);
     ulDestino.appendChild(li);
 
     // evento de excluir
     button.addEventListener("click", () => excluirItem(index));
+    concluido.addEventListener('click', () => concluirItem(index));
   });
 }
 
@@ -43,22 +52,31 @@ function renderizar() {
   if (termo) {
     const filtrados = lista
       .map((item, index) => ({ item, index }))
-      .filter(obj => obj.item.toLowerCase().includes(termo));
+      .filter(obj => obj.item.nome.toLowerCase().includes(termo));
 
     ulFiltro.innerHTML = "";
     filtrados.forEach(obj => {
       let li = document.createElement("li");
       let button = document.createElement("button");
+      let concluido = document.createElement('button');
 
-      li.textContent = obj.item;
+      li.textContent = obj.item.nome;
+      if(obj.item.concluido)li.classList.add('feito');
+
       button.textContent = "❌";
       button.classList.add("excluir");
       button.dataset.index = obj.index;
 
+      concluido.textContent = "✅";
+      concluido.classList.add('concluido');
+      concluido.dataset.index = obj.index;
+
+      li.appendChild(concluido);
       li.appendChild(button);
       ulFiltro.appendChild(li);
 
       button.addEventListener("click", () => excluirItem(obj.index));
+      concluido.addEventListener('click', () => concluirItem(obj.index));
     });
   } else {
     ulFiltro.innerHTML = "";
@@ -71,6 +89,10 @@ function excluirItem(index) {
   renderizar();
 }
 
+function concluirItem(index){
+  lista[index].concluido = !lista[index].concluido;
+  renderizar()
+}
 // ---------- Eventos ----------
 
 // Adicionar tarefa
